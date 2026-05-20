@@ -383,15 +383,18 @@ function SellerBarCard({
                 </span>
               </div>
               <div
-                className="h-8 rounded-md overflow-hidden border border-border/50"
-                style={{ background: "rgba(60,82,70,0.18)" }}
+                className="h-8 rounded-md overflow-hidden backdrop-blur-sm"
+                style={{
+                  background: "rgba(232, 238, 248, 0.06)",
+                  border: "1px solid rgba(232, 238, 248, 0.08)",
+                }}
               >
                 <div
                   className="h-full rounded-md"
                   style={{
                     width: `${width}%`,
-                    background: "linear-gradient(90deg, #1A6FD4 0%, #3D8EF0 70%, #6B8F7A 100%)",
-                    boxShadow: "0 0 16px rgba(61,142,240,0.55)",
+                    background: "linear-gradient(90deg, rgba(91,168,255,0.55) 0%, rgba(61,142,240,0.7) 60%, rgba(107,143,122,0.55) 100%)",
+                    boxShadow: "0 0 18px rgba(91,168,255,0.35)",
                     transition: `width 1400ms cubic-bezier(0.22, 1, 0.36, 1) ${i * 80}ms`,
                   }}
                 />
