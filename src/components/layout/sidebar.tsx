@@ -26,8 +26,8 @@ export function Sidebar() {
         sidebarCollapsed ? "w-[76px]" : "w-[248px]",
       )}
     >
-      <div className="flex items-center justify-center px-4 h-[96px] border-b border-sidebar-border">
-        <img src={wfLogo} alt="WF Cirúrgicos" className="h-[72px] w-[72px] shrink-0 object-contain" />
+      <div className="flex items-center justify-center px-4 h-[180px] border-b border-sidebar-border">
+        <img src={wfLogo} alt="WF Cirúrgicos" className="h-[144px] w-[144px] shrink-0 object-contain" />
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
