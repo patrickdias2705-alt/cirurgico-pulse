@@ -27,7 +27,7 @@ export function Sidebar() {
       )}
     >
       <div className="flex items-center gap-3 px-5 h-[72px] border-b border-sidebar-border">
-        <img src={wfLogo} alt="WF Cirúrgicos" className="h-10 w-10 shrink-0 object-contain drop-shadow-[0_0_10px_rgba(0,212,255,0.35)]" />
+        <img src={wfLogo} alt="WF Cirúrgicos" className="h-10 w-10 shrink-0 object-contain drop-shadow-[0_0_10px_rgba(26,111,212,0.45)]" />
         {!sidebarCollapsed && (
           <div className="flex flex-col leading-tight">
             <span className="font-display font-semibold text-base">Cirúrgicos</span>

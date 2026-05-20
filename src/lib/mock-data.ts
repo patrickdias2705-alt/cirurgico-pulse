@@ -15,11 +15,11 @@ export interface Agent {
 }
 
 export const agents: Agent[] = [
-  { id: "a1", name: "Carlos Silva",     email: "carlos@wfcirurgicos.com.br",  phone: "+55 11 98765-4321", avatarColor: "#00D4FF", status: "online",  whatsapp: "+55 11 98765-4321" },
-  { id: "a2", name: "Ana Beatriz",      email: "ana@wfcirurgicos.com.br",     phone: "+55 11 97654-3210", avatarColor: "#F5C842", status: "online",  whatsapp: "+55 11 97654-3210" },
-  { id: "a3", name: "Rafael Mendes",    email: "rafael@wfcirurgicos.com.br",  phone: "+55 21 96543-2109", avatarColor: "#A78BFA", status: "away",    whatsapp: "+55 21 96543-2109" },
-  { id: "a4", name: "Juliana Costa",    email: "juliana@wfcirurgicos.com.br", phone: "+55 31 95432-1098", avatarColor: "#34D399", status: "online",  whatsapp: "+55 31 95432-1098" },
-  { id: "a5", name: "Felipe Ribeiro",   email: "felipe@wfcirurgicos.com.br",  phone: "+55 47 94321-0987", avatarColor: "#F87171", status: "offline", whatsapp: "+55 47 94321-0987" },
+  { id: "a1", name: "Carlos Silva",     email: "carlos@wfcirurgicos.com.br",  phone: "+55 11 98765-4321", avatarColor: "#1A6FD4", status: "online",  whatsapp: "+55 11 98765-4321" },
+  { id: "a2", name: "Ana Beatriz",      email: "ana@wfcirurgicos.com.br",     phone: "+55 11 97654-3210", avatarColor: "#3D8EF0", status: "online",  whatsapp: "+55 11 97654-3210" },
+  { id: "a3", name: "Rafael Mendes",    email: "rafael@wfcirurgicos.com.br",  phone: "+55 21 96543-2109", avatarColor: "#0F4A96", status: "away",    whatsapp: "+55 21 96543-2109" },
+  { id: "a4", name: "Juliana Costa",    email: "juliana@wfcirurgicos.com.br", phone: "+55 31 95432-1098", avatarColor: "#1DB87E", status: "online",  whatsapp: "+55 31 95432-1098" },
+  { id: "a5", name: "Felipe Ribeiro",   email: "felipe@wfcirurgicos.com.br",  phone: "+55 47 94321-0987", avatarColor: "#D94040", status: "offline", whatsapp: "+55 47 94321-0987" },
 ];
 
 export interface Contact {
@@ -157,11 +157,11 @@ export const leadsOverTime: KpiPoint[] = Array.from({ length: 30 }).map((_, i) =
 });
 
 export const leadOriginBreakdown = [
-  { name: "Facebook Ads",       value: 312, color: "#00D4FF" },
-  { name: "Instagram Ads",      value: 248, color: "#F5C842" },
-  { name: "WhatsApp Orgânico",  value: 156, color: "#A78BFA" },
-  { name: "Indicação",          value:  88, color: "#34D399" },
-  { name: "Direto",             value:  44, color: "#F87171" },
+  { name: "Facebook Ads",       value: 312, color: "#1A6FD4" },
+  { name: "Instagram Ads",      value: 248, color: "#3D8EF0" },
+  { name: "WhatsApp Orgânico",  value: 156, color: "#0F4A96" },
+  { name: "Indicação",          value:  88, color: "#1DB87E" },
+  { name: "Direto",             value:  44, color: "#D94040" },
 ];
 
 export const funnel = [
@@ -216,18 +216,18 @@ export const routingRules: RoutingRule[] = [
 ];
 
 export const stageMeta: Record<LeadStage, { label: string; color: string; bg: string }> = {
-  novo:        { label: "Novo Lead",       color: "#00D4FF", bg: "rgba(0,212,255,0.10)" },
-  contato:     { label: "Em Contato",      color: "#60A5FA", bg: "rgba(96,165,250,0.10)" },
-  qualificado: { label: "Qualificado",     color: "#A78BFA", bg: "rgba(167,139,250,0.10)" },
-  proposta:    { label: "Proposta Enviada",color: "#F5C842", bg: "rgba(245,200,66,0.10)" },
-  fechado:     { label: "Fechado ✓",       color: "#34D399", bg: "rgba(52,211,153,0.10)" },
-  perdido:     { label: "Perdido ✗",       color: "#9CA3AF", bg: "rgba(156,163,175,0.10)" },
+  novo:        { label: "Novo Lead",       color: "#1A6FD4", bg: "rgba(26,111,212,0.12)" },
+  contato:     { label: "Em Contato",      color: "#5BA8FF", bg: "rgba(91,168,255,0.12)" },
+  qualificado: { label: "Qualificado",     color: "#0F4A96", bg: "rgba(61,142,240,0.12)" },
+  proposta:    { label: "Proposta Enviada",color: "#3D8EF0", bg: "rgba(232,160,32,0.12)" },
+  fechado:     { label: "Fechado ✓",       color: "#1DB87E", bg: "rgba(29,184,126,0.12)" },
+  perdido:     { label: "Perdido ✗",       color: "#8A9DC0", bg: "rgba(138,157,192,0.12)" },
 };
 
 export const sourceColor: Record<LeadSource, string> = {
-  "Facebook Ads":      "#00D4FF",
-  "Instagram Ads":     "#F5C842",
-  "WhatsApp Orgânico": "#34D399",
-  "Indicação":         "#A78BFA",
-  "Direto":            "#9CA3AF",
+  "Facebook Ads":      "#1A6FD4",
+  "Instagram Ads":     "#3D8EF0",
+  "WhatsApp Orgânico": "#1DB87E",
+  "Indicação":         "#0F4A96",
+  "Direto":            "#8A9DC0",
 };

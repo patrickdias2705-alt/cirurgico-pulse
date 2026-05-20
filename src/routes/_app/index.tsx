@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_app/")({
 function KpiCard({ label, value, hint, icon: Icon, trend, accent = "cyan", format }: {
   label: string; value: number; hint: string; icon: any; trend: number; accent?: "cyan" | "gold" | "purple" | "green"; format?: (n: number) => string;
 }) {
-  const accentColor = accent === "cyan" ? "#00D4FF" : accent === "gold" ? "#F5C842" : accent === "purple" ? "#A78BFA" : "#34D399";
+  const accentColor = accent === "cyan" ? "#1A6FD4" : accent === "gold" ? "#3D8EF0" : accent === "purple" ? "#0F4A96" : "#1DB87E";
   return (
     <div className="glass glass-hover rounded-xl p-5 relative overflow-hidden group">
       <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full opacity-20 blur-2xl" style={{ background: accentColor }} />
@@ -119,7 +119,7 @@ function DonutCard() {
                   <Cell key={i} fill={s.color} style={{ filter: `drop-shadow(0 0 6px ${s.color}aa)` }} />
                 ))}
               </Pie>
-              <Tooltip contentStyle={{ background: "oklch(0.17 0.028 260)", border: "1px solid oklch(0.30 0.04 260)", borderRadius: 8, fontSize: 12 }} />
+              <Tooltip contentStyle={{ background: "#0D1526", border: "1px solid #1C2E4A", borderRadius: 8, fontSize: 12 }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -157,15 +157,15 @@ function AreaCard() {
           <AreaChart data={leadsOverTime} margin={{ left: -20, right: 8, top: 8 }}>
             <defs>
               <linearGradient id="cyanFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"  stopColor="#00D4FF" stopOpacity={0.55} />
-                <stop offset="100%" stopColor="#00D4FF" stopOpacity={0} />
+                <stop offset="0%"  stopColor="#1A6FD4" stopOpacity={0.55} />
+                <stop offset="100%" stopColor="#1A6FD4" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid stroke="oklch(0.25 0.03 260 / 0.5)" strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#7d8a9c" }} axisLine={false} tickLine={false} interval={4} />
-            <YAxis tick={{ fontSize: 10, fill: "#7d8a9c" }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={{ background: "oklch(0.17 0.028 260)", border: "1px solid oklch(0.30 0.04 260)", borderRadius: 8, fontSize: 12 }} />
-            <Area type="monotone" dataKey="value" stroke="#00D4FF" strokeWidth={2.5} fill="url(#cyanFill)" className="stroke-glow" animationDuration={1400} />
+            <CartesianGrid stroke="rgba(28,46,74,0.5)" strokeDasharray="3 3" vertical={false} />
+            <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#8A9DC0" }} axisLine={false} tickLine={false} interval={4} />
+            <YAxis tick={{ fontSize: 10, fill: "#8A9DC0" }} axisLine={false} tickLine={false} />
+            <Tooltip contentStyle={{ background: "#0D1526", border: "1px solid #1C2E4A", borderRadius: 8, fontSize: 12 }} />
+            <Area type="monotone" dataKey="value" stroke="#1A6FD4" strokeWidth={2.5} fill="url(#cyanFill)" className="stroke-glow" animationDuration={1400} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -182,7 +182,7 @@ function FunnelCard() {
       <div className="mt-4 space-y-2.5">
         {funnel.map((f, i) => {
           const width = (f.count / max) * 100;
-          const colors = ["#00D4FF", "#60A5FA", "#A78BFA", "#F5C842", "#34D399"];
+          const colors = ["#1A6FD4", "#5BA8FF", "#0F4A96", "#3D8EF0", "#1DB87E"];
           return (
             <div key={f.stage}>
               <div className="flex items-baseline justify-between text-xs mb-1">
@@ -210,9 +210,9 @@ function FunnelCard() {
 function RecentConvs() {
   const recent = conversations.slice(0, 5);
   const status: Record<string, { label: string; color: string }> = {
-    new: { label: "novo", color: "#F5C842" },
-    active: { label: "ativo", color: "#00D4FF" },
-    resolved: { label: "resolvido", color: "#7d8a9c" },
+    new: { label: "novo", color: "#3D8EF0" },
+    active: { label: "ativo", color: "#1A6FD4" },
+    resolved: { label: "resolvido", color: "#8A9DC0" },
   };
   return (
     <div className="glass glass-hover rounded-xl p-5 xl:col-span-2">

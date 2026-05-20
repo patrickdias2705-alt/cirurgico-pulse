@@ -72,7 +72,7 @@ function Inbox() {
         <div className="flex-1 overflow-y-auto">
           {filtered.map(c => {
             const contact = contacts.find(x => x.id === c.contactId)!;
-            const borderColor = c.status === "active" ? "#00D4FF" : c.status === "new" ? "#F5C842" : "#7d8a9c";
+            const borderColor = c.status === "active" ? "#1A6FD4" : c.status === "new" ? "#3D8EF0" : "#8A9DC0";
             const selected = c.id === selectedConversationId;
             return (
               <button key={c.id} onClick={() => selectConversation(c.id)}
