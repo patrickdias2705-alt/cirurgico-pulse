@@ -11,7 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppSettingsRouteImport } from './routes/_app/settings'
+import { Route as AppRoutingRouteImport } from './routes/_app/routing'
+import { Route as AppLeadsRouteImport } from './routes/_app/leads'
 import { Route as AppInboxRouteImport } from './routes/_app/inbox'
+import { Route as AppContactsRouteImport } from './routes/_app/contacts'
 import { Route as AppAdsRouteImport } from './routes/_app/ads'
 
 const AppRoute = AppRouteImport.update({
@@ -23,9 +27,29 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRoutingRoute = AppRoutingRouteImport.update({
+  id: '/routing',
+  path: '/routing',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLeadsRoute = AppLeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppInboxRoute = AppInboxRouteImport.update({
   id: '/inbox',
   path: '/inbox',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppContactsRoute = AppContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAdsRoute = AppAdsRouteImport.update({
@@ -37,26 +61,61 @@ const AppAdsRoute = AppAdsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/ads': typeof AppAdsRoute
+  '/contacts': typeof AppContactsRoute
   '/inbox': typeof AppInboxRoute
+  '/leads': typeof AppLeadsRoute
+  '/routing': typeof AppRoutingRoute
+  '/settings': typeof AppSettingsRoute
 }
 export interface FileRoutesByTo {
   '/ads': typeof AppAdsRoute
+  '/contacts': typeof AppContactsRoute
   '/inbox': typeof AppInboxRoute
+  '/leads': typeof AppLeadsRoute
+  '/routing': typeof AppRoutingRoute
+  '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/_app/ads': typeof AppAdsRoute
+  '/_app/contacts': typeof AppContactsRoute
   '/_app/inbox': typeof AppInboxRoute
+  '/_app/leads': typeof AppLeadsRoute
+  '/_app/routing': typeof AppRoutingRoute
+  '/_app/settings': typeof AppSettingsRoute
   '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ads' | '/inbox'
+  fullPaths:
+    | '/'
+    | '/ads'
+    | '/contacts'
+    | '/inbox'
+    | '/leads'
+    | '/routing'
+    | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/ads' | '/inbox' | '/'
-  id: '__root__' | '/_app' | '/_app/ads' | '/_app/inbox' | '/_app/'
+  to:
+    | '/ads'
+    | '/contacts'
+    | '/inbox'
+    | '/leads'
+    | '/routing'
+    | '/settings'
+    | '/'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/_app/ads'
+    | '/_app/contacts'
+    | '/_app/inbox'
+    | '/_app/leads'
+    | '/_app/routing'
+    | '/_app/settings'
+    | '/_app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -79,11 +138,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/routing': {
+      id: '/_app/routing'
+      path: '/routing'
+      fullPath: '/routing'
+      preLoaderRoute: typeof AppRoutingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/leads': {
+      id: '/_app/leads'
+      path: '/leads'
+      fullPath: '/leads'
+      preLoaderRoute: typeof AppLeadsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/inbox': {
       id: '/_app/inbox'
       path: '/inbox'
       fullPath: '/inbox'
       preLoaderRoute: typeof AppInboxRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/contacts': {
+      id: '/_app/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof AppContactsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/ads': {
@@ -98,13 +185,21 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppAdsRoute: typeof AppAdsRoute
+  AppContactsRoute: typeof AppContactsRoute
   AppInboxRoute: typeof AppInboxRoute
+  AppLeadsRoute: typeof AppLeadsRoute
+  AppRoutingRoute: typeof AppRoutingRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAdsRoute: AppAdsRoute,
+  AppContactsRoute: AppContactsRoute,
   AppInboxRoute: AppInboxRoute,
+  AppLeadsRoute: AppLeadsRoute,
+  AppRoutingRoute: AppRoutingRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
