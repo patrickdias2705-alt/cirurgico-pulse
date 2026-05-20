@@ -27,11 +27,16 @@ export function Sidebar() {
       )}
     >
       <div className="flex items-center gap-3 px-5 h-[72px] border-b border-sidebar-border">
-        <img src={wfLogo} alt="WF Cirúrgicos" className="h-10 w-10 shrink-0 object-contain drop-shadow-[0_0_10px_rgba(26,111,212,0.45)]" />
+        <div
+          className="h-10 w-10 shrink-0 grid place-items-center rounded-sm"
+          style={{ background: "#0F4A96", border: "1px solid #1A6FD4", boxShadow: "0 0 12px rgba(26,111,212,0.35)" }}
+        >
+          <img src={wfLogo} alt="WF Cirúrgicos" className="h-7 w-7 object-contain" />
+        </div>
         {!sidebarCollapsed && (
           <div className="flex flex-col leading-tight">
-            <span className="font-display font-semibold text-base">Cirúrgicos</span>
-            <span className="font-mono text-[10px] text-muted-foreground tracking-wider">CRM • OPS</span>
+            <span className="font-display font-bold text-base tracking-[0.15em]" style={{ color: "#F0F4FF" }}>WF</span>
+            <span className="font-sans text-xs" style={{ color: "#8A9DC0" }}>Cirúrgicos</span>
           </div>
         )}
       </div>
