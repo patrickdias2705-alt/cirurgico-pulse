@@ -26,13 +26,8 @@ export function Sidebar() {
         sidebarCollapsed ? "w-[76px]" : "w-[248px]",
       )}
     >
-      <div className="flex items-center gap-3 px-5 h-[72px] border-b border-sidebar-border">
-        <div
-          className="h-10 w-10 shrink-0 grid place-items-center rounded-sm"
-          style={{ background: "#0F4A96", border: "1px solid #1A6FD4", boxShadow: "0 0 12px rgba(26,111,212,0.35)" }}
-        >
-          <img src={wfLogo} alt="WF Cirúrgicos" className="h-7 w-7 object-contain" />
-        </div>
+      <div className="flex items-center gap-3 px-4 h-[96px] border-b border-sidebar-border">
+        <img src={wfLogo} alt="WF Cirúrgicos" className="h-[72px] w-[72px] shrink-0 object-contain" />
         {!sidebarCollapsed && (
           <div className="flex flex-col leading-tight">
             <span className="font-display font-bold text-base tracking-[0.15em]" style={{ color: "#F0F4FF" }}>WF</span>
