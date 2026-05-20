@@ -1,201 +1,395 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import { CountUp } from "@/components/ui/count-up";
-import { brl, num, pct, timeAgo, initials } from "@/lib/format";
-import { leadOriginBreakdown, leadsOverTime, funnel, conversations, contacts, agents, campaigns_meta, sourceColor } from "@/lib/mock-data";
-import { PieChart, Pie, Cell, ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, BarChart, Bar } from "recharts";
-import { TrendingUp, TrendingDown, ArrowUpRight, Users, MessageCircle, Target, DollarSign, Facebook } from "lucide-react";
+import { brl, num } from "@/lib/format";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Cell,
+} from "recharts";
+import {
+  TrendingUp,
+  TrendingDown,
+  UserPlus,
+  Trophy,
+  Megaphone,
+  MessageCircle,
+  GitBranch,
+  Workflow,
+  Lock,
+  Facebook,
+  Instagram,
+  MessageSquare,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_app/")({
   component: Dashboard,
 });
 
-function KpiCard({ label, value, hint, icon: Icon, trend, accent = "cyan", format }: {
-  label: string; value: number; hint: string; icon: any; trend: number; accent?: "cyan" | "gold" | "purple" | "green"; format?: (n: number) => string;
-}) {
-  const accentColor = accent === "cyan" ? "#1A6FD4" : accent === "gold" ? "#3D8EF0" : accent === "purple" ? "#0F4A96" : "#1DB87E";
-  return (
-    <div className="glass glass-hover rounded-xl p-5 relative overflow-hidden group">
-      <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full opacity-20 blur-2xl" style={{ background: accentColor }} />
-      <div className="flex items-start justify-between relative">
-        <div>
-          <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground font-medium">{label}</p>
-          <div className="mt-3 font-mono text-3xl font-semibold tracking-tight" style={{ color: accentColor }}>
-            <CountUp value={value} format={format} />
-          </div>
-          <p className="mt-1 text-xs text-muted-foreground">{hint}</p>
-        </div>
-        <div className="h-9 w-9 rounded-lg flex items-center justify-center border border-border/60" style={{ background: `${accentColor}10` }}>
-          <Icon className="h-4 w-4" style={{ color: accentColor }} strokeWidth={1.75} />
-        </div>
-      </div>
-      <div className="mt-4 flex items-center gap-1.5 text-xs">
-        {trend >= 0
-          ? <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
-          : <TrendingDown className="h-3.5 w-3.5 text-red-400" />}
-        <span className={trend >= 0 ? "text-emerald-400 font-medium" : "text-red-400 font-medium"}>
-          {trend >= 0 ? "+" : ""}{trend}%
-        </span>
-        <span className="text-muted-foreground">vs período anterior</span>
-      </div>
-    </div>
-  );
-}
+// ───────────────────── Mock data ─────────────────────
+const mockData = {
+  vendasHoje: 18450.0,
+  vendasMes: 146200.0,
+  metaMes: 200000.0,
+  metaSemana: 50000.0,
+  vendasSemana: 29000.0,
+  leadsHoje: 7,
+  leadsMes: 134,
+  leadsHojeSource: { fb: 4, ig: 2, wa: 1 },
+  leadsMesSource: { fb: 68, ig: 41, wa: 25 },
+  trendVendasDia: 12,
+  trendVendasMes: 8,
+  trendLeadsMes: 15,
+  vendedores: [
+    { nome: "Carlos Silva",    vendas: 42300, orcamentos: 18, leads: 31 },
+    { nome: "Ana Beatriz",     vendas: 38100, orcamentos: 22, leads: 28 },
+    { nome: "Roberto Mendes",  vendas: 29800, orcamentos: 14, leads: 24 },
+    { nome: "Juliana Costa",   vendas: 21500, orcamentos: 11, leads: 19 },
+    { nome: "Marcos Oliveira", vendas: 14500, orcamentos:  9, leads: 15 },
+  ],
+};
 
+const spark7 = [12, 15, 11, 18, 14, 16, 18.45].map((v, i) => ({ i, v: v * 1000 }));
+const spark30 = Array.from({ length: 30 }).map((_, i) => ({
+  i,
+  v: 3000 + Math.round(Math.sin(i / 2.5) * 1200 + i * 180 + (i % 4) * 400),
+}));
+
+// ───────────────────── Dashboard ─────────────────────
 function Dashboard() {
-  const [range, setRange] = useState<"hoje" | "mes">("mes");
-
-  const totalLeads = 848;
-  const metaLeads = 560;
-  const activeConvs = conversations.filter(c => c.status === "active").length;
-  const conv = 11.4;
-  const pipeline = 1284000;
-
   return (
     <div className="p-6 lg:p-8 space-y-6">
       {/* Header */}
       <div className="flex items-end justify-between flex-wrap gap-4">
         <div>
           <h2 className="font-display text-3xl font-semibold tracking-tight">Visão Geral</h2>
-          <p className="text-sm text-muted-foreground mt-1">Operação WF Cirúrgicos · Atualizado agora · São Paulo</p>
-        </div>
-        <div className="flex items-center gap-2 glass rounded-lg p-1">
-          {(["hoje", "mes"] as const).map(r => (
-            <button
-              key={r}
-              onClick={() => setRange(r)}
-              className={cn("px-3 py-1.5 text-xs rounded-md font-medium transition-all",
-                range === r ? "bg-cyan text-background" : "text-muted-foreground hover:text-foreground")}
-            >
-              {r === "hoje" ? "Hoje" : "Este Mês"}
-            </button>
-          ))}
+          <p className="text-sm text-muted-foreground mt-1">
+            Operação WF Cirúrgicos · Atualizado agora · São Paulo
+          </p>
         </div>
       </div>
 
-      {/* KPI row */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
-        <KpiCard label="Total Leads"          value={range === "hoje" ? 38 : totalLeads} hint={range === "hoje" ? "novos hoje" : "este mês"} icon={Users}         trend={12.4} accent="cyan" />
-        <KpiCard label="Leads Meta Ads"       value={range === "hoje" ? 24 : metaLeads}  hint={`${pct((metaLeads/totalLeads)*100, 0)} do total`} icon={Facebook} trend={18.7} accent="gold" />
-        <KpiCard label="Conversas Ativas"     value={activeConvs}                          hint="no WhatsApp"        icon={MessageCircle} trend={4.1}  accent="purple" />
-        <KpiCard label="Taxa de Conversão"    value={conv}                                 hint="leads → clientes"   icon={Target}        trend={2.3}  accent="green" format={(n) => pct(n, 1)} />
-        <KpiCard label="Pipeline de Receita"  value={pipeline}                             hint="propostas em aberto" icon={DollarSign}   trend={-3.8} accent="gold" format={brl} />
+      {/* ROW 1 — Vendas */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <SalesCard
+          label="Vendas hoje"
+          value={mockData.vendasHoje}
+          trend={mockData.trendVendasDia}
+          trendLabel="vs ontem"
+          spark={spark7}
+        />
+        <SalesCard
+          label="Vendas em maio"
+          value={mockData.vendasMes}
+          trend={mockData.trendVendasMes}
+          trendLabel="vs mês anterior"
+          spark={spark30}
+        />
       </div>
 
-      {/* Charts row 1 */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <DonutCard />
-        <AreaCard />
-        <FunnelCard />
+      {/* ROW 2 — Termômetros */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <ThermometerCard
+          label="Meta do Mês"
+          current={mockData.vendasMes}
+          target={mockData.metaMes}
+        />
+        <ThermometerCard
+          label="Meta da Semana"
+          current={mockData.vendasSemana}
+          target={mockData.metaSemana}
+        />
       </div>
 
-      {/* Bottom row */}
-      <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
-        <RecentConvs />
-        <TopAds />
+      {/* ROW 3 — Leads */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <LeadsCard
+          label="Leads Gerados Hoje"
+          value={mockData.leadsHoje}
+          src={mockData.leadsHojeSource}
+        />
+        <LeadsCard
+          label="Leads Gerados no Mês"
+          value={mockData.leadsMes}
+          src={mockData.leadsMesSource}
+          trend={mockData.trendLeadsMes}
+        />
+      </div>
+
+      {/* ROW 4 — Vendas por Vendedor */}
+      <SellerBarCard
+        title="Vendas por Vendedor — Maio"
+        data={[...mockData.vendedores].sort((a, b) => b.vendas - a.vendas).map(v => ({
+          nome: v.nome,
+          value: v.vendas,
+        }))}
+        format={brl}
+      />
+
+      {/* ROW 5 — Orçamentos por Vendedor */}
+      <SellerBarCard
+        title="Orçamentos Enviados por Vendedor — Maio"
+        data={[...mockData.vendedores].sort((a, b) => b.orcamentos - a.orcamentos).map(v => ({
+          nome: v.nome,
+          value: v.orcamentos,
+          conversion: Math.round((v.vendas / 5000 / v.orcamentos) * 10), // mock %
+        }))}
+        format={(n) => `${num(n)} orç.`}
+        showConversion
+      />
+
+      {/* ROW 6 — Ranking */}
+      <RankingCard />
+
+      {/* Em Breve */}
+      <div className="pt-6">
+        <div className="flex items-center gap-4 mb-5">
+          <div className="h-px flex-1 bg-border/60" />
+          <h3 className="font-display text-sm uppercase tracking-[0.22em] text-muted-foreground">
+            Mais Funcionalidades
+          </h3>
+          <div className="h-px flex-1 bg-border/60" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <LockedCard icon={Megaphone}    name="Meta Ads Analytics"   desc="Performance de campanhas Facebook & Instagram." />
+          <LockedCard icon={MessageCircle} name="WhatsApp Inbox"       desc="Atendimento centralizado em uma única caixa." />
+          <LockedCard icon={GitBranch}    name="Pipeline de Leads"    desc="Funil visual estilo Kanban por estágio." />
+          <LockedCard icon={Workflow}     name="Regras de Roteamento" desc="Distribuição automática de leads por critérios." />
+        </div>
       </div>
     </div>
   );
 }
 
-function DonutCard() {
-  const total = leadOriginBreakdown.reduce((s, x) => s + x.value, 0);
+// ───────────────────── Sales card with sparkline ─────────────────────
+function SalesCard({
+  label, value, trend, trendLabel, spark,
+}: { label: string; value: number; trend: number; trendLabel: string; spark: { i: number; v: number }[] }) {
+  const up = trend >= 0;
   return (
-    <div className="glass glass-hover rounded-xl p-5">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="font-display font-semibold">Origem dos Leads</h3>
-          <p className="text-xs text-muted-foreground">Últimos 30 dias</p>
+    <div className="glass glass-hover rounded-xl p-6 relative overflow-hidden">
+      <div className="absolute -top-20 -right-20 h-56 w-56 rounded-full opacity-25 blur-3xl"
+           style={{ background: "#1A6FD4" }} />
+      <div className="relative">
+        <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-medium">
+          {label}
+        </p>
+        <div className="mt-3 font-mono text-5xl font-semibold tracking-tight text-foreground">
+          <CountUp value={value} format={brl} duration={1500} />
         </div>
-        <span className="font-mono text-xs text-muted-foreground">{num(total)} total</span>
-      </div>
-      <div className="mt-4 grid grid-cols-2 gap-3 items-center">
-        <div className="h-[200px]">
+        <div className="mt-3 flex items-center gap-1.5 text-xs">
+          {up ? (
+            <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
+          ) : (
+            <TrendingDown className="h-3.5 w-3.5 text-red-400" />
+          )}
+          <span className={cn("font-semibold", up ? "text-emerald-400" : "text-red-400")}>
+            {up ? "↑" : "↓"} {Math.abs(trend)}%
+          </span>
+          <span className="text-muted-foreground">{trendLabel}</span>
+        </div>
+        <div className="mt-4 h-[68px] -mx-2">
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie data={leadOriginBreakdown} dataKey="value" innerRadius={50} outerRadius={80} paddingAngle={3} stroke="none" animationDuration={1200}>
-                {leadOriginBreakdown.map((s, i) => (
-                  <Cell key={i} fill={s.color} style={{ filter: `drop-shadow(0 0 6px ${s.color}aa)` }} />
-                ))}
-              </Pie>
-              <Tooltip contentStyle={{ background: "#0D1526", border: "1px solid #1C2E4A", borderRadius: 8, fontSize: 12 }} />
-            </PieChart>
+            <AreaChart data={spark} margin={{ left: 0, right: 0, top: 4, bottom: 0 }}>
+              <defs>
+                <linearGradient id={`spark-${label}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#3D8EF0" stopOpacity={0.55} />
+                  <stop offset="100%" stopColor="#3D8EF0" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <Area
+                type="monotone"
+                dataKey="v"
+                stroke="#5BA8FF"
+                strokeWidth={2}
+                fill={`url(#spark-${label})`}
+                animationDuration={1400}
+              />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
-        <div className="space-y-2">
-          {leadOriginBreakdown.map(s => (
-            <div key={s.name} className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="h-2 w-2 rounded-full shrink-0" style={{ background: s.color, boxShadow: `0 0 6px ${s.color}` }} />
-                <span className="truncate">{s.name}</span>
-              </div>
-              <div className="flex items-center gap-2 font-mono">
-                <span>{s.value}</span>
-                <span className="text-muted-foreground w-9 text-right">{((s.value/total)*100).toFixed(0)}%</span>
-              </div>
+      </div>
+    </div>
+  );
+}
+
+// ───────────────────── Thermometer (circular progress) ─────────────────────
+function ThermometerCard({
+  label, current, target,
+}: { label: string; current: number; target: number }) {
+  const pct = Math.min(100, Math.round((current / target) * 100));
+  const remaining = Math.max(0, target - current);
+  const reached = pct >= 100;
+  const color = reached ? "#1DB87E" : "#1A6FD4";
+
+  const [animPct, setAnimPct] = useState(0);
+  useEffect(() => {
+    const t = requestAnimationFrame(() => setAnimPct(pct));
+    return () => cancelAnimationFrame(t);
+  }, [pct]);
+
+  const size = 180;
+  const stroke = 14;
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const offset = c - (c * animPct) / 100;
+
+  return (
+    <div className="glass glass-hover rounded-xl p-6 relative overflow-hidden">
+      <div className="absolute -top-20 -right-20 h-56 w-56 rounded-full opacity-20 blur-3xl"
+           style={{ background: color }} />
+      <div className="relative flex items-center gap-6">
+        <div className="relative shrink-0" style={{ width: size, height: size }}>
+          <svg width={size} height={size} className="-rotate-90">
+            <circle
+              cx={size / 2}
+              cy={size / 2}
+              r={r}
+              stroke="rgba(28,46,74,0.7)"
+              strokeWidth={stroke}
+              fill="none"
+            />
+            <circle
+              cx={size / 2}
+              cy={size / 2}
+              r={r}
+              stroke={color}
+              strokeWidth={stroke}
+              fill="none"
+              strokeLinecap="round"
+              strokeDasharray={c}
+              strokeDashoffset={offset}
+              style={{
+                transition: "stroke-dashoffset 1500ms cubic-bezier(0.22, 1, 0.36, 1)",
+                filter: `drop-shadow(0 0 8px ${color}99)`,
+              }}
+            />
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <div className="font-mono text-4xl font-bold" style={{ color }}>
+              <CountUp value={pct} duration={1500} />%
             </div>
-          ))}
+          </div>
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-medium">
+            {label}
+          </p>
+          <div className="mt-2 font-mono text-lg">
+            <span className="text-foreground font-semibold">{brl(current)}</span>
+            <span className="text-muted-foreground"> / {brl(target)}</span>
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            {reached
+              ? "🎉 Meta batida!"
+              : <>Faltam <span className="font-mono font-semibold" style={{ color }}>{brl(remaining)}</span> para bater a meta</>}
+          </p>
         </div>
       </div>
     </div>
   );
 }
 
-function AreaCard() {
+// ───────────────────── Leads card ─────────────────────
+function LeadsCard({
+  label, value, src, trend,
+}: { label: string; value: number; src: { fb: number; ig: number; wa: number }; trend?: number }) {
   return (
-    <div className="glass glass-hover rounded-xl p-5">
-      <div className="flex items-center justify-between">
+    <div className="glass glass-hover rounded-xl p-6 relative overflow-hidden">
+      <div className="absolute -top-16 -right-16 h-44 w-44 rounded-full opacity-20 blur-3xl"
+           style={{ background: "#3D8EF0" }} />
+      <div className="relative flex items-start justify-between">
         <div>
-          <h3 className="font-display font-semibold">Leads ao Longo do Tempo</h3>
-          <p className="text-xs text-muted-foreground">30 dias · todas as origens</p>
+          <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-medium">
+            {label}
+          </p>
+          <div className="mt-3 font-mono text-4xl font-semibold tracking-tight text-foreground">
+            <CountUp value={value} duration={1300} />
+          </div>
+          {trend !== undefined && (
+            <div className="mt-2 flex items-center gap-1.5 text-xs">
+              {trend >= 0
+                ? <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
+                : <TrendingDown className="h-3.5 w-3.5 text-red-400" />}
+              <span className={cn("font-semibold", trend >= 0 ? "text-emerald-400" : "text-red-400")}>
+                {trend >= 0 ? "+" : ""}{trend}%
+              </span>
+              <span className="text-muted-foreground">vs mês anterior</span>
+            </div>
+          )}
         </div>
-        <span className="text-xs flex items-center gap-1 text-emerald-400 font-medium"><ArrowUpRight className="h-3 w-3" />+18.7%</span>
+        <div className="h-10 w-10 rounded-lg flex items-center justify-center border border-border/60"
+             style={{ background: "rgba(26,111,212,0.12)" }}>
+          <UserPlus className="h-5 w-5 text-cyan" strokeWidth={1.75} />
+        </div>
       </div>
-      <div className="mt-2 h-[220px]">
-        <ResponsiveContainer>
-          <AreaChart data={leadsOverTime} margin={{ left: -20, right: 8, top: 8 }}>
-            <defs>
-              <linearGradient id="cyanFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"  stopColor="#1A6FD4" stopOpacity={0.55} />
-                <stop offset="100%" stopColor="#1A6FD4" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid stroke="rgba(28,46,74,0.5)" strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#8A9DC0" }} axisLine={false} tickLine={false} interval={4} />
-            <YAxis tick={{ fontSize: 10, fill: "#8A9DC0" }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={{ background: "#0D1526", border: "1px solid #1C2E4A", borderRadius: 8, fontSize: 12 }} />
-            <Area type="monotone" dataKey="value" stroke="#1A6FD4" strokeWidth={2.5} fill="url(#cyanFill)" className="stroke-glow" animationDuration={1400} />
-          </AreaChart>
-        </ResponsiveContainer>
+      <div className="relative mt-5 pt-4 border-t border-border/60 flex items-center gap-4 text-xs text-muted-foreground">
+        <span className="flex items-center gap-1.5">
+          <Facebook className="h-3.5 w-3.5" style={{ color: "#1A6FD4" }} />
+          FB Ads: <span className="font-mono font-semibold text-foreground">{src.fb}</span>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <Instagram className="h-3.5 w-3.5" style={{ color: "#3D8EF0" }} />
+          Instagram: <span className="font-mono font-semibold text-foreground">{src.ig}</span>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <MessageSquare className="h-3.5 w-3.5" style={{ color: "#1DB87E" }} />
+          WhatsApp: <span className="font-mono font-semibold text-foreground">{src.wa}</span>
+        </span>
       </div>
     </div>
   );
 }
 
-function FunnelCard() {
-  const max = funnel[0].count;
+// ───────────────────── Horizontal bar chart card ─────────────────────
+function SellerBarCard({
+  title, data, format, showConversion,
+}: {
+  title: string;
+  data: { nome: string; value: number; conversion?: number }[];
+  format: (n: number) => string;
+  showConversion?: boolean;
+}) {
+  const max = Math.max(...data.map(d => d.value));
   return (
-    <div className="glass glass-hover rounded-xl p-5">
-      <h3 className="font-display font-semibold">Funil de Conversão</h3>
-      <p className="text-xs text-muted-foreground">Lead → Fechado</p>
-      <div className="mt-4 space-y-2.5">
-        {funnel.map((f, i) => {
-          const width = (f.count / max) * 100;
-          const colors = ["#1A6FD4", "#5BA8FF", "#0F4A96", "#3D8EF0", "#1DB87E"];
+    <div className="glass glass-hover rounded-xl p-6">
+      <h3 className="font-display font-semibold text-lg">{title}</h3>
+      <div className="mt-5 space-y-3">
+        {data.map((d, i) => {
+          const width = (d.value / max) * 100;
           return (
-            <div key={f.stage}>
-              <div className="flex items-baseline justify-between text-xs mb-1">
-                <span className="text-muted-foreground">{f.stage}</span>
-                <span className="font-mono">{num(f.count)}{i > 0 && <span className="text-muted-foreground/60 ml-2">{pct((f.count/funnel[i-1].count)*100, 0)}</span>}</span>
+            <div key={d.nome} className="group">
+              <div className="flex items-baseline justify-between text-sm mb-1.5">
+                <span className="font-medium">{d.nome}</span>
+                <span className="font-mono text-foreground/90 flex items-center gap-2">
+                  {showConversion && d.conversion !== undefined && (
+                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded border"
+                          style={{
+                            background: "rgba(29,184,126,0.12)",
+                            color: "#1DB87E",
+                            borderColor: "rgba(29,184,126,0.4)",
+                          }}>
+                      {d.conversion}% conv.
+                    </span>
+                  )}
+                  {format(d.value)}
+                </span>
               </div>
-              <div className="h-7 bg-secondary/50 rounded-md overflow-hidden">
+              <div className="h-8 bg-secondary/40 rounded-md overflow-hidden">
                 <div
-                  className="h-full rounded-md transition-all duration-[1400ms] ease-out"
+                  className="h-full rounded-md"
                   style={{
                     width: `${width}%`,
-                    background: `linear-gradient(90deg, ${colors[i]}, ${colors[i]}90)`,
-                    boxShadow: `0 0 12px ${colors[i]}55`,
+                    background: "linear-gradient(90deg, #0F4A96, #3D8EF0)",
+                    boxShadow: "0 0 14px rgba(26,111,212,0.45)",
+                    transition: `width 1400ms cubic-bezier(0.22, 1, 0.36, 1) ${i * 80}ms`,
                   }}
                 />
               </div>
@@ -207,76 +401,134 @@ function FunnelCard() {
   );
 }
 
-function RecentConvs() {
-  const recent = conversations.slice(0, 5);
-  const status: Record<string, { label: string; color: string }> = {
-    new: { label: "novo", color: "#3D8EF0" },
-    active: { label: "ativo", color: "#1A6FD4" },
-    resolved: { label: "resolvido", color: "#8A9DC0" },
-  };
+// ───────────────────── Ranking ─────────────────────
+function RankingCard() {
+  const ranked = [...mockData.vendedores].sort((a, b) => b.vendas - a.vendas);
+  const top3 = ranked.slice(0, 3);
+  const rest = ranked.slice(3);
+  const podium = [top3[1], top3[0], top3[2]].filter(Boolean); // 2 - 1 - 3
+
+  const styles = [
+    { pos: 2, color: "#C0C0C0", glow: "rgba(192,192,192,0.35)", emoji: "🥈", size: "scale-95" },
+    { pos: 1, color: "#FFD166", glow: "rgba(255,209,102,0.45)", emoji: "🥇", size: "scale-110" },
+    { pos: 3, color: "#CD7F32", glow: "rgba(205,127,50,0.35)", emoji: "🥉", size: "scale-95" },
+  ];
+
   return (
-    <div className="glass glass-hover rounded-xl p-5 xl:col-span-2">
-      <h3 className="font-display font-semibold">Conversas Recentes</h3>
-      <p className="text-xs text-muted-foreground">WhatsApp · últimos atendimentos</p>
-      <div className="mt-4 divide-y divide-border/60">
-        {recent.map(c => {
-          const contact = contacts.find(x => x.id === c.contactId)!;
-          const s = status[c.status];
+    <div className="glass glass-hover rounded-xl p-6">
+      <h3 className="font-display font-semibold text-lg flex items-center gap-2">
+        <Trophy className="h-5 w-5 text-gold" /> Ranking de Vendedores
+      </h3>
+
+      {/* Podium */}
+      <div className="mt-6 grid grid-cols-3 gap-4 items-end">
+        {podium.map((v, i) => {
+          const s = styles[i];
+          const taxa = Math.round((v.vendas / 5000 / v.orcamentos) * 10);
           return (
-            <div key={c.id} className="flex items-center gap-3 py-3 group cursor-pointer">
-              <div className="relative">
-                <div className="h-9 w-9 rounded-full flex items-center justify-center text-xs font-semibold" style={{ background: `${sourceColor[contact.source]}20`, color: sourceColor[contact.source] }}>
-                  {initials(contact.name)}
+            <div key={v.nome} className={cn("transition-transform", s.size)}>
+              <div
+                className="rounded-xl p-5 text-center relative overflow-hidden"
+                style={{
+                  border: `1px solid ${s.color}66`,
+                  background: `linear-gradient(135deg, rgba(13,21,38,0.9), rgba(17,29,51,0.9))`,
+                  boxShadow: `0 0 0 1px ${s.color}33, 0 0 24px ${s.glow}`,
+                }}
+              >
+                <div className="text-3xl">{s.emoji}</div>
+                <div
+                  className="mx-auto mt-2 h-12 w-12 rounded-full flex items-center justify-center font-bold text-sm"
+                  style={{
+                    background: `${s.color}20`,
+                    color: s.color,
+                    border: `1px solid ${s.color}66`,
+                  }}
+                >
+                  {v.nome.split(" ").map(w => w[0]).slice(0, 2).join("")}
                 </div>
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <p className="text-sm font-medium truncate">{contact.name}</p>
-                  <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded" style={{ background: `${s.color}15`, color: s.color }}>{s.label}</span>
+                <p className="mt-3 font-display font-semibold text-sm truncate">{v.nome}</p>
+                <div className="mt-2 font-mono text-lg font-bold" style={{ color: s.color }}>
+                  <CountUp value={v.vendas} format={brl} duration={1500} />
                 </div>
-                <p className="text-xs text-muted-foreground truncate">{c.lastMessage}</p>
+                <p className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+                  {v.orcamentos} orç. · {taxa}% conv.
+                </p>
               </div>
-              <span className="font-mono text-[11px] text-muted-foreground">{timeAgo(c.lastTime)}</span>
             </div>
           );
         })}
       </div>
+
+      {/* Rest table */}
+      {rest.length > 0 && (
+        <div className="mt-8 overflow-x-auto">
+          <table className="w-full text-sm min-w-[640px]">
+            <thead>
+              <tr className="text-[11px] uppercase tracking-wider text-muted-foreground border-b border-border/60">
+                <th className="text-left font-medium py-2.5 w-16">Posição</th>
+                <th className="text-left font-medium">Vendedor</th>
+                <th className="text-right font-medium">Vendas</th>
+                <th className="text-right font-medium">Orçamentos</th>
+                <th className="text-right font-medium">Conversão</th>
+                <th className="text-right font-medium">Leads</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border/60">
+              {rest.map((v, i) => {
+                const taxa = Math.round((v.vendas / 5000 / v.orcamentos) * 10);
+                return (
+                  <tr key={v.nome} className="hover:bg-secondary/30 transition-colors">
+                    <td className="py-3 font-mono text-muted-foreground">#{i + 4}</td>
+                    <td className="font-medium">{v.nome}</td>
+                    <td className="text-right font-mono text-cyan">
+                      <CountUp value={v.vendas} format={brl} duration={1400} />
+                    </td>
+                    <td className="text-right font-mono">
+                      <CountUp value={v.orcamentos} duration={1200} />
+                    </td>
+                    <td className="text-right font-mono text-emerald-400">{taxa}%</td>
+                    <td className="text-right font-mono">
+                      <CountUp value={v.leads} duration={1200} />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
 
-function TopAds() {
-  const top = [...campaigns_meta].sort((a, b) => b.leads - a.leads).slice(0, 5);
+// ───────────────────── Locked Em Breve card ─────────────────────
+function LockedCard({
+  icon: Icon, name, desc,
+}: { icon: any; name: string; desc: string }) {
   return (
-    <div className="glass glass-hover rounded-xl p-5 xl:col-span-3 overflow-hidden">
-      <h3 className="font-display font-semibold">Top Anúncios</h3>
-      <p className="text-xs text-muted-foreground">Performance por campanha</p>
-      <div className="mt-4 overflow-x-auto">
-        <table className="w-full text-sm min-w-[560px]">
-          <thead>
-            <tr className="text-[11px] uppercase tracking-wider text-muted-foreground">
-              <th className="text-left font-medium py-2">Campanha</th>
-              <th className="text-left font-medium">Plataforma</th>
-              <th className="text-right font-medium">Spend</th>
-              <th className="text-right font-medium">Leads</th>
-              <th className="text-right font-medium">CPL</th>
-              <th className="text-right font-medium">CTR</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border/60">
-            {top.map(c => (
-              <tr key={c.id} className="hover:bg-secondary/30 transition-colors">
-                <td className="py-2.5">{c.name}</td>
-                <td className="text-muted-foreground text-xs">{c.platform}</td>
-                <td className="text-right font-mono">{brl(c.spend)}</td>
-                <td className="text-right font-mono text-cyan">{c.leads}</td>
-                <td className="text-right font-mono">{brl(c.spend / c.leads)}</td>
-                <td className="text-right font-mono">{pct((c.clicks/c.impressions)*100)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div
+      className="glass rounded-xl p-5 relative overflow-hidden opacity-50 cursor-default select-none"
+      style={{ filter: "saturate(0.7)" }}
+    >
+      <div className="absolute top-3 right-3 z-10">
+        <span
+          className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1"
+          style={{
+            background: "rgba(13,21,38,0.85)",
+            border: "1px solid rgba(26,111,212,0.6)",
+            color: "#5BA8FF",
+            backdropFilter: "blur(8px)",
+          }}
+        >
+          <Lock className="h-2.5 w-2.5" /> Em Breve
+        </span>
       </div>
+      <div className="h-10 w-10 rounded-lg flex items-center justify-center border border-border/60 mb-4"
+           style={{ background: "rgba(26,111,212,0.08)" }}>
+        <Icon className="h-5 w-5 text-cyan" strokeWidth={1.75} />
+      </div>
+      <h4 className="font-display font-semibold text-sm">{name}</h4>
+      <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{desc}</p>
     </div>
   );
 }
