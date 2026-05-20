@@ -5,6 +5,7 @@ import { initials } from "@/lib/format";
 import { Building2, Users, MessageCircle, BarChart3, Bell, Check, Copy, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import wfLogo from "@/assets/wf-logo.png";
 
 export const Route = createFileRoute("/_app/settings")({
   component: Settings,
