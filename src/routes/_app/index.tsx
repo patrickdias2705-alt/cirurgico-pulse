@@ -186,11 +186,11 @@ function SalesCard({
         </div>
         <div className="mt-3 flex items-center gap-1.5 text-xs">
           {up ? (
-            <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
+            <TrendingUp className="h-3.5 w-3.5 text-moss" />
           ) : (
             <TrendingDown className="h-3.5 w-3.5 text-red-400" />
           )}
-          <span className={cn("font-semibold", up ? "text-emerald-400" : "text-red-400")}>
+          <span className={cn("font-semibold", up ? "text-moss" : "text-red-400")}>
             {up ? "↑" : "↓"} {Math.abs(trend)}%
           </span>
           <span className="text-muted-foreground">{trendLabel}</span>
@@ -227,7 +227,7 @@ function ThermometerCard({
   const pct = Math.min(100, Math.round((current / target) * 100));
   const remaining = Math.max(0, target - current);
   const reached = pct >= 100;
-  const color = reached ? "#1DB87E" : "#1A6FD4";
+  const color = reached ? "#6B8F7A" : "#1A6FD4";
 
   const [animPct, setAnimPct] = useState(0);
   useEffect(() => {
@@ -316,9 +316,9 @@ function LeadsCard({
           {trend !== undefined && (
             <div className="mt-2 flex items-center gap-1.5 text-xs">
               {trend >= 0
-                ? <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
+                ? <TrendingUp className="h-3.5 w-3.5 text-moss" />
                 : <TrendingDown className="h-3.5 w-3.5 text-red-400" />}
-              <span className={cn("font-semibold", trend >= 0 ? "text-emerald-400" : "text-red-400")}>
+              <span className={cn("font-semibold", trend >= 0 ? "text-moss" : "text-red-400")}>
                 {trend >= 0 ? "+" : ""}{trend}%
               </span>
               <span className="text-muted-foreground">vs mês anterior</span>
@@ -340,7 +340,7 @@ function LeadsCard({
           Instagram: <span className="font-mono font-semibold text-foreground">{src.ig}</span>
         </span>
         <span className="flex items-center gap-1.5">
-          <MessageSquare className="h-3.5 w-3.5" style={{ color: "#1DB87E" }} />
+          <MessageSquare className="h-3.5 w-3.5" style={{ color: "#6B8F7A" }} />
           WhatsApp: <span className="font-mono font-semibold text-foreground">{src.wa}</span>
         </span>
       </div>
@@ -372,9 +372,9 @@ function SellerBarCard({
                   {showConversion && d.conversion !== undefined && (
                     <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded border"
                           style={{
-                            background: "rgba(29,184,126,0.12)",
-                            color: "#1DB87E",
-                            borderColor: "rgba(29,184,126,0.4)",
+                            background: "rgba(107,143,122,0.12)",
+                            color: "#6B8F7A",
+                            borderColor: "rgba(107,143,122,0.4)",
                           }}>
                       {d.conversion}% conv.
                     </span>
@@ -489,7 +489,7 @@ function RankingCard() {
                     <td className="text-right font-mono">
                       <CountUp value={v.orcamentos} duration={1200} />
                     </td>
-                    <td className="text-right font-mono text-emerald-400">{taxa}%</td>
+                    <td className="text-right font-mono text-moss">{taxa}%</td>
                     <td className="text-right font-mono">
                       <CountUp value={v.leads} duration={1200} />
                     </td>
