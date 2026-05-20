@@ -31,7 +31,7 @@ function AdsPage() {
   const platformData = ["Facebook", "Instagram", "Audience Network"].map(p => ({
     name: p,
     value: campaigns_meta.filter(c => c.platform === p).reduce((s, c) => s + c.leads, 0),
-    color: p === "Facebook" ? "#00D4FF" : p === "Instagram" ? "#F5C842" : "#A78BFA",
+    color: p === "Facebook" ? "#1A6FD4" : p === "Instagram" ? "#3D8EF0" : "#0F4A96",
   }));
 
   const byCampaign = [...campaigns_meta].sort((a, b) => b.leads - a.leads).map(c => ({
@@ -65,12 +65,12 @@ function AdsPage() {
 
       {/* KPI row */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
-        <KpiMini label="Total Investido" value={totals.spend} format={brl} color="#F5C842" />
-        <KpiMini label="Total Leads"     value={totals.leads}              color="#00D4FF" />
-        <KpiMini label="CPL"             value={cpl}        format={brl} color="#A78BFA" />
-        <KpiMini label="CTR"             value={ctr}        format={(n) => pct(n)} color="#34D399" />
-        <KpiMini label="ROAS"            value={roas}       format={(n) => `${n.toFixed(1)}x`} color="#F5C842" />
-        <KpiMini label="Impressões"      value={totals.impressions}        color="#00D4FF" />
+        <KpiMini label="Total Investido" value={totals.spend} format={brl} color="#3D8EF0" />
+        <KpiMini label="Total Leads"     value={totals.leads}              color="#1A6FD4" />
+        <KpiMini label="CPL"             value={cpl}        format={brl} color="#0F4A96" />
+        <KpiMini label="CTR"             value={ctr}        format={(n) => pct(n)} color="#1DB87E" />
+        <KpiMini label="ROAS"            value={roas}       format={(n) => `${n.toFixed(1)}x`} color="#3D8EF0" />
+        <KpiMini label="Impressões"      value={totals.impressions}        color="#1A6FD4" />
       </div>
 
       {/* Charts */}
@@ -81,14 +81,14 @@ function AdsPage() {
           <div className="mt-2 h-[260px]">
             <ResponsiveContainer>
               <LineChart data={spendVsLeads} margin={{ left: -10, right: 8, top: 10 }}>
-                <CartesianGrid stroke="oklch(0.25 0.03 260 / 0.5)" strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#7d8a9c" }} axisLine={false} tickLine={false} interval={4} />
-                <YAxis yAxisId="left" tick={{ fontSize: 10, fill: "#F5C842" }} axisLine={false} tickLine={false} />
-                <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10, fill: "#00D4FF" }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: "oklch(0.17 0.028 260)", border: "1px solid oklch(0.30 0.04 260)", borderRadius: 8, fontSize: 12 }} />
+                <CartesianGrid stroke="rgba(28,46,74,0.5)" strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#8A9DC0" }} axisLine={false} tickLine={false} interval={4} />
+                <YAxis yAxisId="left" tick={{ fontSize: 10, fill: "#3D8EF0" }} axisLine={false} tickLine={false} />
+                <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10, fill: "#1A6FD4" }} axisLine={false} tickLine={false} />
+                <Tooltip contentStyle={{ background: "#0D1526", border: "1px solid #1C2E4A", borderRadius: 8, fontSize: 12 }} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Line yAxisId="left"  type="monotone" dataKey="spend" name="Investimento (R$)" stroke="#F5C842" strokeWidth={2.5} dot={false} className="stroke-glow" animationDuration={1400} />
-                <Line yAxisId="right" type="monotone" dataKey="leads" name="Leads" stroke="#00D4FF" strokeWidth={2.5} dot={false} className="stroke-glow" animationDuration={1400} />
+                <Line yAxisId="left"  type="monotone" dataKey="spend" name="Investimento (R$)" stroke="#3D8EF0" strokeWidth={2.5} dot={false} className="stroke-glow" animationDuration={1400} />
+                <Line yAxisId="right" type="monotone" dataKey="leads" name="Leads" stroke="#1A6FD4" strokeWidth={2.5} dot={false} className="stroke-glow" animationDuration={1400} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -103,7 +103,7 @@ function AdsPage() {
                 <Pie data={platformData} dataKey="value" innerRadius={55} outerRadius={85} stroke="none" animationDuration={1200}>
                   {platformData.map((p, i) => <Cell key={i} fill={p.color} style={{ filter: `drop-shadow(0 0 6px ${p.color}aa)` }} />)}
                 </Pie>
-                <Tooltip contentStyle={{ background: "oklch(0.17 0.028 260)", border: "1px solid oklch(0.30 0.04 260)", borderRadius: 8, fontSize: 12 }} />
+                <Tooltip contentStyle={{ background: "#0D1526", border: "1px solid #1C2E4A", borderRadius: 8, fontSize: 12 }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -124,15 +124,15 @@ function AdsPage() {
           <div className="mt-3 h-[280px]">
             <ResponsiveContainer>
               <BarChart data={byCampaign} layout="vertical" margin={{ left: 20, right: 20 }}>
-                <CartesianGrid stroke="oklch(0.25 0.03 260 / 0.4)" horizontal={false} />
-                <XAxis type="number" tick={{ fontSize: 10, fill: "#7d8a9c" }} axisLine={false} tickLine={false} />
-                <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: "#c9d4e3" }} axisLine={false} tickLine={false} width={170} />
+                <CartesianGrid stroke="rgba(28,46,74,0.4)" horizontal={false} />
+                <XAxis type="number" tick={{ fontSize: 10, fill: "#8A9DC0" }} axisLine={false} tickLine={false} />
+                <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: "#E8EEF8" }} axisLine={false} tickLine={false} width={170} />
                 <Tooltip
-                  contentStyle={{ background: "oklch(0.17 0.028 260)", border: "1px solid oklch(0.30 0.04 260)", borderRadius: 8, fontSize: 12 }}
+                  contentStyle={{ background: "#0D1526", border: "1px solid #1C2E4A", borderRadius: 8, fontSize: 12 }}
                   formatter={(_v: any, _n, p: any) => [`${p.payload.leads} leads · CPL ${brl(p.payload.cpl)}`, "Performance"]}
                 />
                 <Bar dataKey="leads" radius={[0, 4, 4, 0]} animationDuration={1400}>
-                  {byCampaign.map((_, i) => <Cell key={i} fill={i % 2 === 0 ? "#00D4FF" : "#F5C842"} />)}
+                  {byCampaign.map((_, i) => <Cell key={i} fill={i % 2 === 0 ? "#1A6FD4" : "#3D8EF0"} />)}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>

@@ -76,9 +76,9 @@ function RootComponent() {
         position="bottom-right"
         toastOptions={{
           style: {
-            background: 'oklch(0.18 0.03 260 / 0.9)',
-            color: 'oklch(0.97 0 0)',
-            border: '1px solid oklch(0.30 0.04 260 / 0.6)',
+            background: 'rgba(13,21,38,0.95)',
+            color: '#F0F4FF',
+            border: '1px solid rgba(28,46,74,0.8)',
             backdropFilter: 'blur(20px)',
           },
         }}
