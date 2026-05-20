@@ -27,8 +27,8 @@ export function AppLayout() {
               <Bell className="h-4 w-4" />
               <span className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-cyan glow-cyan" />
             </button>
-            <div className="h-9 w-9 rounded-full bg-gradient-to-br from-cyan to-[#6f3] flex items-center justify-center text-background font-display font-semibold text-sm">
-              WF
+            <div className="h-9 w-9 rounded-full bg-background border border-cyan/30 flex items-center justify-center overflow-hidden">
+              <img src={wfLogo} alt="WF" className="h-7 w-7 object-contain" />
             </div>
           </div>
         </header>
