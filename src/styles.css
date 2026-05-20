@@ -93,7 +93,9 @@
   /* Kept token names for backwards compat — remapped to brand blues */
   --cyan: #1A6FD4;
   --gold: #3D8EF0;
-  --success: #1DB87E;
+  --success: #6B8F7A;
+  --moss: #6B8F7A;
+  --moss-dim: #4A6754;
   --warning: #E8A020;
   --danger: #D94040;
   --info: #3D8EF0;
@@ -171,10 +173,13 @@ html { color-scheme: dark; }
 
   .text-cyan { color: var(--cyan); }
   .text-gold { color: var(--gold); }
+  .text-moss { color: var(--moss); }
   .bg-cyan { background-color: var(--cyan); }
   .bg-gold { background-color: var(--gold); }
+  .bg-moss { background-color: var(--moss); }
   .border-cyan { border-color: var(--cyan); }
   .border-gold { border-color: var(--gold); }
+  .border-moss { border-color: var(--moss); }
 
   .gradient-mesh {
     position: absolute;
