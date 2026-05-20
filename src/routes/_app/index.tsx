@@ -382,13 +382,16 @@ function SellerBarCard({
                   {format(d.value)}
                 </span>
               </div>
-              <div className="h-8 bg-secondary/40 rounded-md overflow-hidden">
+              <div
+                className="h-8 rounded-md overflow-hidden border border-border/50"
+                style={{ background: "rgba(60,82,70,0.18)" }}
+              >
                 <div
                   className="h-full rounded-md"
                   style={{
                     width: `${width}%`,
-                    background: "linear-gradient(90deg, #0F4A96, #3D8EF0)",
-                    boxShadow: "0 0 14px rgba(26,111,212,0.45)",
+                    background: "linear-gradient(90deg, #1A6FD4 0%, #3D8EF0 70%, #6B8F7A 100%)",
+                    boxShadow: "0 0 16px rgba(61,142,240,0.55)",
                     transition: `width 1400ms cubic-bezier(0.22, 1, 0.36, 1) ${i * 80}ms`,
                   }}
                 />
