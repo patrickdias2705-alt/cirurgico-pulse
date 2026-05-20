@@ -2,6 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { useAppStore } from "@/store/app-store";
 import { LayoutDashboard, MessageCircle, KanbanSquare, BarChart3, Users, GitBranch, Settings, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import wfLogo from "@/assets/wf-logo.png";
 
 const nav = [
   { to: "/",          label: "Dashboard",        icon: LayoutDashboard },
