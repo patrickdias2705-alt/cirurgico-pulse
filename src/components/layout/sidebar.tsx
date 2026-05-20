@@ -2,6 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { useAppStore } from "@/store/app-store";
 import { LayoutDashboard, MessageCircle, KanbanSquare, BarChart3, Users, GitBranch, Settings, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import wfLogo from "@/assets/wf-logo.png";
 
 const nav = [
   { to: "/",          label: "Dashboard",        icon: LayoutDashboard },
@@ -26,9 +27,7 @@ export function Sidebar() {
       )}
     >
       <div className="flex items-center gap-3 px-5 h-[72px] border-b border-sidebar-border">
-        <div className="flex items-center justify-center h-10 w-10 shrink-0 bg-background border border-gold/60 text-gold font-display font-bold tracking-tight">
-          WF
-        </div>
+        <img src={wfLogo} alt="WF Cirúrgicos" className="h-10 w-10 shrink-0 object-contain drop-shadow-[0_0_10px_rgba(0,212,255,0.35)]" />
         {!sidebarCollapsed && (
           <div className="flex flex-col leading-tight">
             <span className="font-display font-semibold text-base">Cirúrgicos</span>

@@ -5,6 +5,7 @@ import { initials } from "@/lib/format";
 import { Building2, Users, MessageCircle, BarChart3, Bell, Check, Copy, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import wfLogo from "@/assets/wf-logo.png";
 
 export const Route = createFileRoute("/_app/settings")({
   component: Settings,
@@ -58,7 +59,7 @@ function EmpresaTab() {
       <div>
         <p className="text-xs text-muted-foreground mb-2">Logo</p>
         <div className="flex items-center gap-3">
-          <div className="h-16 w-16 rounded-md border border-gold/60 bg-background flex items-center justify-center font-display font-bold text-gold text-2xl">WF</div>
+          <div className="h-16 w-16 rounded-md border border-cyan/30 bg-background flex items-center justify-center overflow-hidden"><img src={wfLogo} alt="WF Cirúrgicos" className="h-14 w-14 object-contain" /></div>
           <button className="h-9 px-3 rounded-md border border-border/60 text-xs font-medium hover:bg-secondary/60">Alterar logo</button>
         </div>
       </div>
