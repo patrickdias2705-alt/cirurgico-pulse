@@ -1,6 +1,7 @@
 import { Outlet } from "@tanstack/react-router";
 import { Sidebar, MobileBottomNav } from "./sidebar";
 import { Bell, Search } from "lucide-react";
+import wfLogo from "@/assets/wf-logo.png";
 
 export function AppLayout() {
   return (
