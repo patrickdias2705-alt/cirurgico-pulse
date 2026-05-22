@@ -363,6 +363,168 @@ function LeadsCard({
   );
 }
 
+// ───────────────────── Orçamentos em Aberto ─────────────────────
+function OrcamentosAbertosCard({
+  data,
+}: {
+  data: {
+    total: number;
+    vendidos: number;
+    abertos: number;
+    perdidos: number;
+    valorAberto: number;
+    valorVendido: number;
+    ticketMedio: number;
+  };
+}) {
+  const taxaConversao = Math.round((data.vendidos / data.total) * 100);
+  const pctAbertos = (data.abertos / data.total) * 100;
+  const pctVendidos = (data.vendidos / data.total) * 100;
+  const pctPerdidos = (data.perdidos / data.total) * 100;
+
+  return (
+    <div className="glass glass-hover rounded-xl p-6 relative overflow-hidden">
+      <div
+        className="absolute -top-20 -right-20 h-56 w-56 rounded-full opacity-20 blur-3xl"
+        style={{ background: "#3D8EF0" }}
+      />
+      <div className="relative">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="flex items-center gap-2">
+            <FileText className="h-5 w-5 text-cyan" strokeWidth={1.75} />
+            <h3 className="font-display font-semibold text-lg">Orçamentos em Aberto</h3>
+          </div>
+          <span
+            className="text-[10px] font-semibold px-2 py-1 rounded border"
+            style={{
+              background: "rgba(107,143,122,0.12)",
+              color: "#6B8F7A",
+              borderColor: "rgba(107,143,122,0.4)",
+            }}
+          >
+            {taxaConversao}% taxa de conversão
+          </span>
+        </div>
+
+        {/* 3 grandes números */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Em aberto — destaque */}
+          <div
+            className="rounded-lg p-5 border"
+            style={{
+              background: "rgba(26,111,212,0.08)",
+              borderColor: "rgba(91,168,255,0.25)",
+            }}
+          >
+            <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.18em] text-muted-foreground font-medium">
+              <Clock className="h-3.5 w-3.5" style={{ color: "#5BA8FF" }} />
+              Em proposta
+            </div>
+            <div className="mt-2 font-mono text-4xl font-semibold tracking-tight" style={{ color: "#5BA8FF" }}>
+              <CountUp value={data.abertos} duration={1300} />
+            </div>
+            <div className="mt-1 text-xs text-muted-foreground">
+              representam{" "}
+              <span className="font-mono font-semibold text-foreground">{brl(data.valorAberto)}</span>
+            </div>
+          </div>
+
+          {/* Vendidos */}
+          <div
+            className="rounded-lg p-5 border"
+            style={{
+              background: "rgba(107,143,122,0.08)",
+              borderColor: "rgba(107,143,122,0.3)",
+            }}
+          >
+            <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.18em] text-muted-foreground font-medium">
+              <CheckCircle2 className="h-3.5 w-3.5 text-moss" />
+              Convertidos em venda
+            </div>
+            <div className="mt-2 font-mono text-4xl font-semibold tracking-tight text-moss">
+              <CountUp value={data.vendidos} duration={1300} />
+            </div>
+            <div className="mt-1 text-xs text-muted-foreground">
+              fecharam{" "}
+              <span className="font-mono font-semibold text-foreground">{brl(data.valorVendido)}</span>
+            </div>
+          </div>
+
+          {/* Total enviado */}
+          <div
+            className="rounded-lg p-5 border"
+            style={{
+              background: "rgba(232,238,248,0.04)",
+              borderColor: "rgba(232,238,248,0.1)",
+            }}
+          >
+            <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground font-medium">
+              Total enviados no mês
+            </div>
+            <div className="mt-2 font-mono text-4xl font-semibold tracking-tight text-foreground">
+              <CountUp value={data.total} duration={1300} />
+            </div>
+            <div className="mt-1 text-xs text-muted-foreground">
+              ticket médio{" "}
+              <span className="font-mono font-semibold text-foreground">{brl(data.ticketMedio)}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Barra de proporção */}
+        <div className="mt-6">
+          <div
+            className="h-3 w-full rounded-full overflow-hidden flex"
+            style={{
+              background: "rgba(232,238,248,0.06)",
+              border: "1px solid rgba(232,238,248,0.08)",
+            }}
+          >
+            <div
+              className="h-full"
+              style={{
+                width: `${pctVendidos}%`,
+                background: "linear-gradient(90deg, rgba(107,143,122,0.7), rgba(107,143,122,0.5))",
+                transition: "width 1400ms cubic-bezier(0.22, 1, 0.36, 1)",
+              }}
+            />
+            <div
+              className="h-full"
+              style={{
+                width: `${pctAbertos}%`,
+                background: "linear-gradient(90deg, rgba(91,168,255,0.65), rgba(61,142,240,0.55))",
+                transition: "width 1400ms cubic-bezier(0.22, 1, 0.36, 1) 120ms",
+              }}
+            />
+            <div
+              className="h-full"
+              style={{
+                width: `${pctPerdidos}%`,
+                background: "rgba(232,238,248,0.18)",
+                transition: "width 1400ms cubic-bezier(0.22, 1, 0.36, 1) 240ms",
+              }}
+            />
+          </div>
+          <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground flex-wrap gap-3">
+            <span className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-moss" />
+              Vendidos ({data.vendidos})
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full" style={{ background: "#5BA8FF" }} />
+              Em aberto ({data.abertos})
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full" style={{ background: "rgba(232,238,248,0.4)" }} />
+              Perdidos ({data.perdidos})
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ───────────────────── Horizontal bar chart card ─────────────────────
 function SellerBarCard({
   title, data, format, showConversion,
