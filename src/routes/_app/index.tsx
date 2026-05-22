@@ -91,14 +91,14 @@ function Dashboard() {
       {/* ROW 1 — Vendas */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <SalesCard
-          label="Vendas hoje"
+          label="Vendas do Dia"
           value={mockData.vendasHoje}
           trend={mockData.trendVendasDia}
           trendLabel="vs ontem"
           spark={spark7}
         />
         <SalesCard
-          label="Vendas em maio"
+          label="Vendas do Mês"
           value={mockData.vendasMes}
           trend={mockData.trendVendasMes}
           trendLabel="vs mês anterior"
@@ -120,7 +120,10 @@ function Dashboard() {
         />
       </div>
 
-      {/* ROW 3 — Leads */}
+      {/* ROW 3 — Orçamentos em Aberto */}
+      <OrcamentosAbertosCard data={mockData.orcamentos} />
+
+      {/* ROW 4 — Leads */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <LeadsCard
           label="Leads Gerados Hoje"
