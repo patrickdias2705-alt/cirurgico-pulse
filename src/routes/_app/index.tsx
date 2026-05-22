@@ -47,6 +47,15 @@ const mockData = {
   trendVendasDia: 12,
   trendVendasMes: 8,
   trendLeadsMes: 15,
+  orcamentos: {
+    total: 74,            // orçamentos enviados no mês
+    vendidos: 28,         // viraram venda
+    abertos: 38,          // em aberto / em negociação
+    perdidos: 8,          // recusados
+    valorAberto: 312800,  // R$ em propostas em aberto
+    valorVendido: 146200, // R$ já fechado
+    ticketMedio: 8230,    // ticket médio das propostas em aberto
+  },
   vendedores: [
     { nome: "Carlos Silva",    vendas: 42300, orcamentos: 18, leads: 31 },
     { nome: "Ana Beatriz",     vendas: 38100, orcamentos: 22, leads: 28 },
