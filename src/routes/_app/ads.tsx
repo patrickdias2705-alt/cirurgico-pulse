@@ -81,6 +81,12 @@ function AdsPage() {
         <KpiMini label="Impressões"      value={totals.impressions}        color="#1A6FD4" />
       </div>
 
+      {/* Leads Gerados */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <LeadsCard label="Leads Gerados Hoje" value={leadsMock.hoje} src={leadsMock.hojeSrc} />
+        <LeadsCard label="Leads Gerados no Mês" value={leadsMock.mes} src={leadsMock.mesSrc} trend={leadsMock.trendMes} />
+      </div>
+
       {/* Charts */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         <div className="glass glass-hover rounded-xl p-5 xl:col-span-2">
