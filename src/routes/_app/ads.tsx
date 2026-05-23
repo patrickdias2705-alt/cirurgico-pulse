@@ -4,8 +4,16 @@ import { CountUp } from "@/components/ui/count-up";
 import { brl, num, pct } from "@/lib/format";
 import { campaigns_meta, spendVsLeads } from "@/lib/mock-data";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
-import { Facebook, Instagram, Globe, Pause, Eye, PlugZap, Calendar } from "lucide-react";
+import { Facebook, Instagram, Globe, Pause, Eye, PlugZap, Calendar, UserPlus, MessageSquare, TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const leadsMock = {
+  hoje: 7,
+  mes: 134,
+  hojeSrc: { fb: 4, ig: 2, wa: 1 },
+  mesSrc: { fb: 68, ig: 41, wa: 25 },
+  trendMes: 15,
+};
 
 export const Route = createFileRoute("/_app/ads")({
   component: AdsPage,
