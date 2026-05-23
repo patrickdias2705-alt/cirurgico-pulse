@@ -123,20 +123,6 @@ function Dashboard() {
       {/* ROW 3 — Orçamentos em Aberto */}
       <OrcamentosAbertosCard data={mockData.orcamentos} />
 
-      {/* ROW 4 — Leads */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <LeadsCard
-          label="Leads Gerados Hoje"
-          value={mockData.leadsHoje}
-          src={mockData.leadsHojeSource}
-        />
-        <LeadsCard
-          label="Leads Gerados no Mês"
-          value={mockData.leadsMes}
-          src={mockData.leadsMesSource}
-          trend={mockData.trendLeadsMes}
-        />
-      </div>
 
       {/* ROW 4 — Vendas por Vendedor */}
       <SellerBarCard

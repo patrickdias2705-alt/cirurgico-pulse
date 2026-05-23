@@ -4,8 +4,16 @@ import { CountUp } from "@/components/ui/count-up";
 import { brl, num, pct } from "@/lib/format";
 import { campaigns_meta, spendVsLeads } from "@/lib/mock-data";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
-import { Facebook, Instagram, Globe, Pause, Eye, PlugZap, Calendar } from "lucide-react";
+import { Facebook, Instagram, Globe, Pause, Eye, PlugZap, Calendar, UserPlus, MessageSquare, TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const leadsMock = {
+  hoje: 7,
+  mes: 134,
+  hojeSrc: { fb: 4, ig: 2, wa: 1 },
+  mesSrc: { fb: 68, ig: 41, wa: 25 },
+  trendMes: 15,
+};
 
 export const Route = createFileRoute("/_app/ads")({
   component: AdsPage,
@@ -71,6 +79,12 @@ function AdsPage() {
         <KpiMini label="CTR"             value={ctr}        format={(n) => pct(n)} color="#1DB87E" />
         <KpiMini label="ROAS"            value={roas}       format={(n) => `${n.toFixed(1)}x`} color="#3D8EF0" />
         <KpiMini label="Impressões"      value={totals.impressions}        color="#1A6FD4" />
+      </div>
+
+      {/* Leads Gerados */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <LeadsCard label="Leads Gerados Hoje" value={leadsMock.hoje} src={leadsMock.hojeSrc} />
+        <LeadsCard label="Leads Gerados no Mês" value={leadsMock.mes} src={leadsMock.mesSrc} trend={leadsMock.trendMes} />
       </div>
 
       {/* Charts */}
@@ -229,6 +243,52 @@ function KpiMini({ label, value, format, color }: { label: string; value: number
       <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground font-medium">{label}</p>
       <div className="mt-2 font-mono text-2xl font-semibold" style={{ color }}>
         <CountUp value={value} format={format} />
+      </div>
+    </div>
+  );
+}
+
+function LeadsCard({
+  label, value, src, trend,
+}: { label: string; value: number; src: { fb: number; ig: number; wa: number }; trend?: number }) {
+  return (
+    <div className="glass glass-hover rounded-xl p-6 relative overflow-hidden">
+      <div className="absolute -top-16 -right-16 h-44 w-44 rounded-full opacity-20 blur-3xl" style={{ background: "#3D8EF0" }} />
+      <div className="relative flex items-start justify-between">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-medium">{label}</p>
+          <div className="mt-3 font-mono text-4xl font-semibold tracking-tight text-foreground">
+            <CountUp value={value} duration={1300} />
+          </div>
+          {trend !== undefined && (
+            <div className="mt-2 flex items-center gap-1.5 text-xs">
+              {trend >= 0
+                ? <TrendingUp className="h-3.5 w-3.5" style={{ color: "#6B8F7A" }} />
+                : <TrendingDown className="h-3.5 w-3.5 text-red-400" />}
+              <span className={cn("font-semibold")} style={{ color: trend >= 0 ? "#6B8F7A" : undefined }}>
+                {trend >= 0 ? "+" : ""}{trend}%
+              </span>
+              <span className="text-muted-foreground">vs mês anterior</span>
+            </div>
+          )}
+        </div>
+        <div className="h-10 w-10 rounded-lg flex items-center justify-center border border-border/60" style={{ background: "rgba(26,111,212,0.12)" }}>
+          <UserPlus className="h-5 w-5 text-cyan" strokeWidth={1.75} />
+        </div>
+      </div>
+      <div className="relative mt-5 pt-4 border-t border-border/60 flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
+        <span className="flex items-center gap-1.5">
+          <Facebook className="h-3.5 w-3.5" style={{ color: "#1A6FD4" }} />
+          FB Ads: <span className="font-mono font-semibold text-foreground">{src.fb}</span>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <Instagram className="h-3.5 w-3.5" style={{ color: "#3D8EF0" }} />
+          Instagram: <span className="font-mono font-semibold text-foreground">{src.ig}</span>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <MessageSquare className="h-3.5 w-3.5" style={{ color: "#6B8F7A" }} />
+          WhatsApp: <span className="font-mono font-semibold text-foreground">{src.wa}</span>
+        </span>
       </div>
     </div>
   );
