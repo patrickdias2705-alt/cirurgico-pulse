@@ -11,12 +11,16 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as ApiHealthRouteImport } from './routes/api.health'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppRoutingRouteImport } from './routes/_app/routing'
 import { Route as AppLeadsRouteImport } from './routes/_app/leads'
 import { Route as AppInboxRouteImport } from './routes/_app/inbox'
 import { Route as AppContactsRouteImport } from './routes/_app/contacts'
 import { Route as AppAdsRouteImport } from './routes/_app/ads'
+import { Route as ApiAuthActionRouteImport } from './routes/api.auth.$action'
+import { Route as ApiAnalyticsResourceRouteImport } from './routes/api.analytics.$resource'
+import { Route as ApiInternalAnalyticsBitrixSyncRouteImport } from './routes/api.internal.analytics.bitrix-sync'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -26,6 +30,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
+} as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
@@ -57,6 +66,22 @@ const AppAdsRoute = AppAdsRouteImport.update({
   path: '/ads',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiAuthActionRoute = ApiAuthActionRouteImport.update({
+  id: '/api/auth/$action',
+  path: '/api/auth/$action',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAnalyticsResourceRoute = ApiAnalyticsResourceRouteImport.update({
+  id: '/api/analytics/$resource',
+  path: '/api/analytics/$resource',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiInternalAnalyticsBitrixSyncRoute =
+  ApiInternalAnalyticsBitrixSyncRouteImport.update({
+    id: '/api/internal/analytics/bitrix-sync',
+    path: '/api/internal/analytics/bitrix-sync',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
@@ -66,6 +91,10 @@ export interface FileRoutesByFullPath {
   '/leads': typeof AppLeadsRoute
   '/routing': typeof AppRoutingRoute
   '/settings': typeof AppSettingsRoute
+  '/api/health': typeof ApiHealthRoute
+  '/api/analytics/$resource': typeof ApiAnalyticsResourceRoute
+  '/api/auth/$action': typeof ApiAuthActionRoute
+  '/api/internal/analytics/bitrix-sync': typeof ApiInternalAnalyticsBitrixSyncRoute
 }
 export interface FileRoutesByTo {
   '/ads': typeof AppAdsRoute
@@ -74,7 +103,11 @@ export interface FileRoutesByTo {
   '/leads': typeof AppLeadsRoute
   '/routing': typeof AppRoutingRoute
   '/settings': typeof AppSettingsRoute
+  '/api/health': typeof ApiHealthRoute
   '/': typeof AppIndexRoute
+  '/api/analytics/$resource': typeof ApiAnalyticsResourceRoute
+  '/api/auth/$action': typeof ApiAuthActionRoute
+  '/api/internal/analytics/bitrix-sync': typeof ApiInternalAnalyticsBitrixSyncRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -85,7 +118,11 @@ export interface FileRoutesById {
   '/_app/leads': typeof AppLeadsRoute
   '/_app/routing': typeof AppRoutingRoute
   '/_app/settings': typeof AppSettingsRoute
+  '/api/health': typeof ApiHealthRoute
   '/_app/': typeof AppIndexRoute
+  '/api/analytics/$resource': typeof ApiAnalyticsResourceRoute
+  '/api/auth/$action': typeof ApiAuthActionRoute
+  '/api/internal/analytics/bitrix-sync': typeof ApiInternalAnalyticsBitrixSyncRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +134,10 @@ export interface FileRouteTypes {
     | '/leads'
     | '/routing'
     | '/settings'
+    | '/api/health'
+    | '/api/analytics/$resource'
+    | '/api/auth/$action'
+    | '/api/internal/analytics/bitrix-sync'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/ads'
@@ -105,7 +146,11 @@ export interface FileRouteTypes {
     | '/leads'
     | '/routing'
     | '/settings'
+    | '/api/health'
     | '/'
+    | '/api/analytics/$resource'
+    | '/api/auth/$action'
+    | '/api/internal/analytics/bitrix-sync'
   id:
     | '__root__'
     | '/_app'
@@ -115,11 +160,19 @@ export interface FileRouteTypes {
     | '/_app/leads'
     | '/_app/routing'
     | '/_app/settings'
+    | '/api/health'
     | '/_app/'
+    | '/api/analytics/$resource'
+    | '/api/auth/$action'
+    | '/api/internal/analytics/bitrix-sync'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
+  ApiHealthRoute: typeof ApiHealthRoute
+  ApiAnalyticsResourceRoute: typeof ApiAnalyticsResourceRoute
+  ApiAuthActionRoute: typeof ApiAuthActionRoute
+  ApiInternalAnalyticsBitrixSyncRoute: typeof ApiInternalAnalyticsBitrixSyncRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -137,6 +190,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_app/settings': {
       id: '/_app/settings'
@@ -180,6 +240,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/api/auth/$action': {
+      id: '/api/auth/$action'
+      path: '/api/auth/$action'
+      fullPath: '/api/auth/$action'
+      preLoaderRoute: typeof ApiAuthActionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/analytics/$resource': {
+      id: '/api/analytics/$resource'
+      path: '/api/analytics/$resource'
+      fullPath: '/api/analytics/$resource'
+      preLoaderRoute: typeof ApiAnalyticsResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/internal/analytics/bitrix-sync': {
+      id: '/api/internal/analytics/bitrix-sync'
+      path: '/api/internal/analytics/bitrix-sync'
+      fullPath: '/api/internal/analytics/bitrix-sync'
+      preLoaderRoute: typeof ApiInternalAnalyticsBitrixSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -207,6 +288,10 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
+  ApiHealthRoute: ApiHealthRoute,
+  ApiAnalyticsResourceRoute: ApiAnalyticsResourceRoute,
+  ApiAuthActionRoute: ApiAuthActionRoute,
+  ApiInternalAnalyticsBitrixSyncRoute: ApiInternalAnalyticsBitrixSyncRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
