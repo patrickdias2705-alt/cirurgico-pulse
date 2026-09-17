@@ -26,6 +26,8 @@ export function CountUp({ value, duration = 1200, format, className, decimals = 
     return () => cancelAnimationFrame(raf);
   }, [value, duration]);
 
-  const display = format ? format(n) : n.toLocaleString("pt-BR", { maximumFractionDigits: decimals });
+  const display = format
+    ? format(n)
+    : n.toLocaleString("pt-BR", { maximumFractionDigits: decimals });
   return <span className={className}>{display}</span>;
 }

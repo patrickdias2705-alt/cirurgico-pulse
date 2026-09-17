@@ -12,8 +12,7 @@ export const pct = (n: number, digits = 1) =>
 export const ddmm = (d: Date) =>
   d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
 
-export const ddmmyyyy = (d: Date) =>
-  d.toLocaleDateString("pt-BR");
+export const ddmmyyyy = (d: Date) => d.toLocaleDateString("pt-BR");
 
 export const timeAgo = (d: Date) => {
   const s = Math.floor((Date.now() - d.getTime()) / 1000);
@@ -23,7 +22,10 @@ export const timeAgo = (d: Date) => {
   return `${Math.floor(s / 86400)}d`;
 };
 
-export const phone = (p: string) => p; // already formatted in mock data
-
 export const initials = (name: string) =>
-  name.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
+  name
+    .split(" ")
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
